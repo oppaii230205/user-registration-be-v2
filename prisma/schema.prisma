@@ -1,0 +1,37 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String        @id @default(uuid())
+  email     String        @unique
+  password  String
+  createdAt DateTime      @default(now())
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
+  id            String   @id @default(uuid())
+  tokenHash     String   @unique
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+
+  revoked       Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  expiresAt     DateTime
+  createdByIp   String?
+  lastUsedAt    DateTime?
+  lastUsedByIp  String?
+
+  // Self relation: replacedBy (next token in the chain)
+  replacedById  String?
+  replacedBy    RefreshToken? @relation("RefreshTokenReplacement", fields: [replacedById], references: [id])
+
+  // Opposite side of the relation: tokens replaced by THIS one. Array is required because of Prisma limitation
+  replacedTokens RefreshToken[] @relation("RefreshTokenReplacement")
+}
+
