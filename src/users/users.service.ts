@@ -12,6 +12,13 @@ export class UserService {
     private config: ConfigService,
   ) {}
 
+  async getById(userId: string) {
+    return this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, email: true, createdAt: true },
+    });
+  }
+
   async register(dto: CreateUserRequest) {
     const exists = await this.prisma.user.findUnique({
       where: { email: dto.email },

@@ -10,7 +10,7 @@ export class UserController {
   @UseGuards(AccessJwtGuard)
   @Get("me")
   getMe(@Req() req) {
-    return req.user;
+    return this.userService.getById(req.user.userId);
   }
 
   @Post("register")
