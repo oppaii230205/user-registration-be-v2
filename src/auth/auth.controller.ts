@@ -22,7 +22,7 @@ export class AuthController {
     res.cookie("refreshToken", result.refreshToken, {
       httpOnly: true,
       secure: this.config.get("NODE_ENV") === "production",
-      sameSite: "lax",
+      sameSite: "none",
       path: "/auth/refresh",
     });
 
@@ -40,7 +40,7 @@ export class AuthController {
     res.cookie("refreshToken", result.refreshToken, {
       httpOnly: true,
       secure: this.config.get("NODE_ENV") === "production",
-      sameSite: "lax",
+      sameSite: "none",
       path: "/auth/refresh",
     });
 
